@@ -22,7 +22,10 @@ import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,11 +42,24 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.personaldetailsapp.R
 
-
+@Composable
+fun GithubScreenShown() {
+    var githubScreenIsShown = remember {
+        mutableStateOf(false)
+    }
+    if(githubScreenIsShown != githubScreenIsShown){
+        GithubWebViewComponent()
+    } else {
+        HomeScreen()
+    }
+}
 
 //Composable to display the image
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+    var githubScreenIsShown by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier,
@@ -75,14 +91,17 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         .clip(RoundedCornerShape(50)),
                     contentScale = ContentScale.Crop,
                 )
-                Button(onClick = { }) {
+                Button(onClick = { githubScreenIsShown = true }) {
                     Text(text = stringResource(R.string.open_github))
                 }
             }
         }
         Text(text = "")
     }
-    
+
+    if (githubScreenIsShown) {
+        GithubWebViewComponent()
+    }
 }
 
 
