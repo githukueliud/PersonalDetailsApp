@@ -22,6 +22,7 @@ import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,24 +43,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.personaldetailsapp.R
 
-@Composable
-fun GithubScreenShown() {
-    var githubScreenIsShown = remember {
-        mutableStateOf(false)
-    }
-    if(githubScreenIsShown != githubScreenIsShown){
-        GithubWebViewComponent()
-    } else {
-        HomeScreen()
-    }
-}
 
-//Composable to display the image
+
+//Composable to display the HomeScreen
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    var githubScreenIsShown by remember {
-        mutableStateOf(false)
-    }
+fun HomeScreen(homeScreenViewModel: HomeScreenViewModel ,modifier: Modifier = Modifier) {
+    val githubScreenIsShown by homeScreenViewModel.githubScreenIsShown.collectAsState()
 
     Column(
         modifier = Modifier,
@@ -91,7 +80,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         .clip(RoundedCornerShape(50)),
                     contentScale = ContentScale.Crop,
                 )
-                Button(onClick = { githubScreenIsShown = true }) {
+                Button(onClick = { homeScreenViewModel.showGitHubScreen() }) {
                     Text(text = stringResource(R.string.open_github))
                 }
             }
@@ -106,7 +95,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 
 
-//This is the Navigation routes
+
 //This is the WebView component
 @Composable
 fun GithubWebViewComponent() {
@@ -129,13 +118,5 @@ fun GithubWebViewComponent() {
 
 
 
-enum class PersonalDetailsScreens() {
-    HomeScreen,
-    GithubScreen
-}
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}
+
